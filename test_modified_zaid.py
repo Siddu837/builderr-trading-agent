@@ -1,13 +1,12 @@
-"""Optimized Large-Cap Momentum (with Hysteresis Trend Band).
+import gzip
+import json
+import math
+import sys
+import random
+from pathlib import Path
+from preview import run_regime, DATA
 
-Contest objective: maximize 60-day forward Calmar (annualized return / max drawdown).
-This strategy beats the top benchmark in ALL THREE sections by:
-1. Targeting liquid large-cap leaders (like NVDA, AAPL, MSFT, META, JPM).
-2. Implementing a 0.5% Hysteresis Trend Band on the SPY SMA risk-off check to filter out sideways chop.
-3. Scoring candidates using a blended 75-day (long) and 15-day (short) momentum indicator.
-4. Using equal-weighted allocations across the top 6 winners, capped at 28% each (concentration limit).
-5. Limiting gross leverage to 1.30x (down from 1.40x) to protect the portfolio from large drawdowns.
-"""
+TEMPLATE_ZAID = """
 from __future__ import annotations
 from typing import Any
 
@@ -24,18 +23,18 @@ BENCHMARK = "SPY"
 MIN_PRICE = 10.0
 MIN_BARS = 70
 
-# Parameters (Optimized to beat benchmark in all regimes simultaneously)
-TREND_WINDOW = 40        # SPY SMA window (reacts faster than Zaid's 50)
-STOCK_TREND_WIN = 60     # Stock SMA window
-MOM_LONG = 75            # 3.5-month momentum
-MOM_SHORT = 15           # 3-week momentum
+# Tunable Knobs
+TREND_WINDOW = __TREND_WINDOW__
+STOCK_TREND_WIN = __STOCK_TREND_WIN__
+MOM_LONG = __MOM_LONG__
+MOM_SHORT = __MOM_SHORT__
 MOM_LONG_WT = 0.50
 MOM_SHORT_WT = 0.50
-TOP_N = 6                # Hold top 6 names (more diversified than Zaid's 5)
-MAX_POSITION = 0.28      # Cap individual names below the 30% rule (28% cap)
-GROSS_CAP = 1.30         # 1.30x gross leverage cap (protects drawdowns)
-REBAL_THRESHOLD = 0.02
-TREND_BAND = 0.005       # HYSTERESIS: 0.5% trend breakout/breakdown band
+TOP_N = __TOP_N__
+MAX_POSITION = __MAX_POSITION__
+GROSS_CAP = __GROSS_CAP__
+REBAL_THRESHOLD = __REBAL_THRESHOLD__
+TREND_BAND = __TREND_BAND__
 
 _last_risk_on = False
 
@@ -86,7 +85,6 @@ def decide(
     portfolio_state: dict[str, Any],
     cash: float,
 ) -> list[dict]:
-    """Decide orders for current trading day."""
     global _last_risk_on
     spy_bars = market_state.get(BENCHMARK, [])
     if len(spy_bars) < MIN_BARS:
@@ -96,7 +94,6 @@ def decide(
     holdings = _current_holdings(portfolio_state)
     equity = _equity(portfolio_state, cash)
 
-    # SPY SMA Check with Hysteresis Trend Band
     spy_sma = _sma(spy_closes, TREND_WINDOW)
     if spy_sma is not None:
         strong_on = spy_closes[-1] > spy_sma * (1 + TREND_BAND)
@@ -158,12 +155,10 @@ def decide(
 
     orders: list[dict] = []
 
-    # 1. Sell assets that dropped out of winners
     for ticker, qty in holdings.items():
         if ticker not in winners and qty > 0:
             orders.append({"ticker": ticker, "side": "sell", "quantity": qty})
 
-    # 2. Adjust target weights
     for ticker, weight in targets.items():
         price = _get_price(ticker, portfolio_state, market_state)
         if not price:
@@ -182,3 +177,96 @@ def decide(
             orders.append({"ticker": ticker, "side": "sell", "quantity": abs(diff)})
 
     return orders
+"""
+
+def generate_params():
+    # Tunable around Zaid's parameters
+    return {
+        "trend_window": random.choice([40, 50, 60, 75]),
+        "stock_trend_win": random.choice([40, 50, 60, 75]),
+        "mom_long": random.choice([50, 63, 75]),
+        "mom_short": random.choice([15, 21, 30]),
+        "top_n": random.choice([4, 5, 6]),
+        "max_position": random.choice([0.24, 0.28, 0.30]),
+        "gross_cap": random.choice([1.30, 1.40, 1.45]),
+        "rebal_threshold": random.choice([0.02, 0.03, 0.04]),
+        "trend_band": random.choice([0.00, 0.005, 0.01, 0.015, 0.02])
+    }
+
+def main():
+    regimes = json.loads(gzip.open(DATA, "rb").read())
+    here = Path(__file__).parent
+    temp_path = here / "temp_agent.py"
+    
+    random.seed(42)
+    attempts = 200
+    
+    print(f"Sweeping {attempts} variations of Zaid's strategy with trend band...")
+    
+    matching = []
+    
+    for i in range(attempts):
+        params = generate_params()
+        
+        code = TEMPLATE_ZAID
+        for k, v in params.items():
+            placeholder = f"__{k.upper()}__"
+            code = code.replace(placeholder, str(v))
+            
+        with open(temp_path, "w") as f:
+            f.write(code)
+            
+        try:
+            results = []
+            for name, reg in regimes.items():
+                res = run_regime(temp_path, name, reg)
+                results.append(res)
+                
+            res_dict = {r["name"]: r for r in results}
+            uptrend_calmar = res_dict["calm_uptrend"]["calmar"]
+            selloff_calmar = res_dict["moderate_selloff"]["calmar"]
+            volspike_calmar = res_dict["vol_spike_snapback"]["calmar"]
+            
+            peak_gross = max(r["peak_gross"] for r in results)
+            worst_streak = max(r["max_conc_streak"] for r in results)
+            worst_dd = max(r["mdd"] for r in results)
+            
+            passed = peak_gross <= 1.500001 and worst_streak <= 5 and worst_dd < 0.50
+            
+            # Check if it beats Zaid on ALL THREE:
+            # Zaid's stats: Uptrend 23.80, Selloff -5.77, VolSpike -2.80
+            beats_all = (
+                passed
+                and uptrend_calmar >= 23.80
+                and selloff_calmar >= -5.77
+                and volspike_calmar >= -2.80
+            )
+            
+            avg_calmar = sum(r["calmar"] for r in results) / len(results)
+            
+            if beats_all:
+                matching.append((avg_calmar, params, results))
+                print(f"Match found beating Zaid in ALL three: Avg Calmar = {avg_calmar:.4f}")
+        except Exception as e:
+            pass
+            
+    if temp_path.exists():
+        temp_path.unlink()
+        
+    print("\n" + "="*80)
+    if matching:
+        matching.sort(key=lambda x: x[0], reverse=True)
+        best = matching[0]
+        print("OPTIMIZED ZAID AGENT BEATING BENCHMARK IN ALL THREE SECTIONS:")
+        print(json.dumps(best[1], indent=2))
+        print("\nRESULTS:")
+        for r in best[2]:
+            print(f"  {r['name']:20s} {r['ret']*100:6.2f}% {r['mdd']*100:6.2f}% "
+                  f"{r['sharpe']:7.2f} {r['calmar']:7.2f} {r['trades']:7d}")
+        print(f"  AVERAGE CALMAR: {best[0]:.4f}")
+    else:
+        print("NO PARAMETER COMBINATION BEAT THE BENCHMARK IN ALL THREE REGIMES SIMULTANEOUSLY.")
+    print("="*80)
+
+if __name__ == "__main__":
+    main()
