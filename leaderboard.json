@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-06-12T23:18:45Z",
-  "as_of_market_date": "2026-06-12",
+  "generated_at_utc": "2026-06-15T17:59:51Z",
+  "as_of_market_date": "2026-06-15",
   "round_start": "2026-06-02",
   "start_cash": 100000.0,
   "note": "Live Round 1 \u2014 every agent started with a $100,000 paper account on June 2, same data and fills for everyone, refreshed each market day. The final winner is risk-adjusted (see rules), so no one wins on a single lucky bet.",
@@ -8,97 +8,97 @@
     {
       "name": "zaid",
       "label": "round 1 \u00b7 entrant",
-      "equity": 104215.41,
-      "pnl": 4215.41,
-      "ret": 0.0422,
+      "equity": 111677.05,
+      "pnl": 11677.05,
+      "ret": 0.1168,
       "trades": 9
     },
     {
       "name": "sumegh",
       "label": "round 1 \u00b7 entrant",
-      "equity": 101544.39,
-      "pnl": 1544.39,
-      "ret": 0.0154,
+      "equity": 109613.37,
+      "pnl": 9613.37,
+      "ret": 0.0961,
       "trades": 4
-    },
-    {
-      "name": "dual-momentum-rotation",
-      "label": "house \u00b7 all-weather",
-      "equity": 99562.28,
-      "pnl": -437.72,
-      "ret": -0.0044,
-      "trades": 5
-    },
-    {
-      "name": "opu",
-      "label": "round 1 \u00b7 entrant",
-      "equity": 99451.52,
-      "pnl": -548.48,
-      "ret": -0.0055,
-      "trades": 8
-    },
-    {
-      "name": "vol-target",
-      "label": "reference",
-      "equity": 99165.78,
-      "pnl": -834.22,
-      "ret": -0.0083,
-      "trades": 7
     },
     {
       "name": "shyam",
       "label": "round 1 \u00b7 entrant",
-      "equity": 98730.22,
-      "pnl": -1269.78,
-      "ret": -0.0127,
+      "equity": 101971.06,
+      "pnl": 1971.06,
+      "ret": 0.0197,
       "trades": 8
     },
     {
-      "name": "sector-rotation",
-      "label": "reference",
-      "equity": 98508.52,
-      "pnl": -1491.48,
-      "ret": -0.0149,
-      "trades": 4
+      "name": "opu",
+      "label": "round 1 \u00b7 entrant",
+      "equity": 101207.73,
+      "pnl": 1207.73,
+      "ret": 0.0121,
+      "trades": 8
     },
     {
-      "name": "drawdown-momentum",
-      "label": "house \u00b7 the bar to beat",
-      "equity": 96382.27,
-      "pnl": -3617.73,
-      "ret": -0.0362,
-      "trades": 12
-    },
-    {
-      "name": "ai-momentum-basket",
-      "label": "house \u00b7 aggressive",
-      "equity": 95878.52,
-      "pnl": -4121.48,
-      "ret": -0.0412,
-      "trades": 9
+      "name": "dual-momentum-rotation",
+      "label": "house \u00b7 all-weather",
+      "equity": 100981.46,
+      "pnl": 981.46,
+      "ret": 0.0098,
+      "trades": 5
     },
     {
       "name": "mohit",
       "label": "round 1 \u00b7 entrant",
-      "equity": 95218.57,
-      "pnl": -4781.43,
-      "ret": -0.0478,
+      "equity": 100894.82,
+      "pnl": 894.82,
+      "ret": 0.0089,
       "trades": 24
+    },
+    {
+      "name": "vol-target",
+      "label": "reference",
+      "equity": 100857.52,
+      "pnl": 857.52,
+      "ret": 0.0086,
+      "trades": 7
+    },
+    {
+      "name": "sector-rotation",
+      "label": "reference",
+      "equity": 100033.87,
+      "pnl": 33.87,
+      "ret": 0.0003,
+      "trades": 4
+    },
+    {
+      "name": "ai-momentum-basket",
+      "label": "house \u00b7 aggressive",
+      "equity": 99031.17,
+      "pnl": -968.83,
+      "ret": -0.0097,
+      "trades": 9
+    },
+    {
+      "name": "drawdown-momentum",
+      "label": "house \u00b7 the bar to beat",
+      "equity": 98195.76,
+      "pnl": -1804.24,
+      "ret": -0.018,
+      "trades": 12
     },
     {
       "name": "harsimran",
       "label": "round 1 \u00b7 entrant",
-      "equity": 94940.71,
-      "pnl": -5059.29,
-      "ret": -0.0506,
+      "equity": 97419.94,
+      "pnl": -2580.06,
+      "ret": -0.0258,
       "trades": 34
     },
     {
       "name": "robert",
       "label": "round 1 \u00b7 entrant",
-      "equity": 93385.81,
-      "pnl": -6614.19,
-      "ret": -0.0661,
+      "equity": 93691.72,
+      "pnl": -6308.28,
+      "ret": -0.0631,
       "trades": 29
     }
   ]
