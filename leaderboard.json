@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-06-19T20:28:01Z",
+  "generated_at_utc": "2026-06-19T22:06:20Z",
   "as_of_market_date": "2026-06-18",
   "round_start": "2026-06-02",
   "start_cash": 100000.0,
@@ -46,6 +46,14 @@
       "trades": 24
     },
     {
+      "name": "dual-momentum-rotation",
+      "label": "house \u00b7 all-weather",
+      "equity": 100381.66,
+      "pnl": 381.66,
+      "ret": 0.0038,
+      "trades": 5
+    },
+    {
       "name": "vol-target",
       "label": "reference",
       "equity": 100044.67,
@@ -54,12 +62,28 @@
       "trades": 9
     },
     {
+      "name": "sector-rotation",
+      "label": "reference",
+      "equity": 99409.12,
+      "pnl": -590.88,
+      "ret": -0.0059,
+      "trades": 4
+    },
+    {
       "name": "drawdown-momentum",
       "label": "house \u00b7 the bar to beat",
       "equity": 98193.98,
       "pnl": -1806.02,
       "ret": -0.0181,
       "trades": 14
+    },
+    {
+      "name": "ai-momentum-basket",
+      "label": "house \u00b7 aggressive",
+      "equity": 98088.11,
+      "pnl": -1911.89,
+      "ret": -0.0191,
+      "trades": 9
     },
     {
       "name": "harsimran",
@@ -76,30 +100,6 @@
       "pnl": -6543.2,
       "ret": -0.0654,
       "trades": 29
-    },
-    {
-      "name": "ai-momentum-basket",
-      "label": "house \u00b7 aggressive",
-      "equity": 88008.81,
-      "pnl": -11991.19,
-      "ret": -0.1199,
-      "trades": 9
-    },
-    {
-      "name": "dual-momentum-rotation",
-      "label": "house \u00b7 all-weather",
-      "equity": 80581.62,
-      "pnl": -19418.38,
-      "ret": -0.1942,
-      "trades": 5
-    },
-    {
-      "name": "sector-rotation",
-      "label": "reference",
-      "equity": 75625.64,
-      "pnl": -24374.36,
-      "ret": -0.2437,
-      "trades": 4
     }
   ]
 }
