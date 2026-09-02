@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-09-02T20:36:02Z",
+  "generated_at_utc": "2026-09-02T23:02:39Z",
   "as_of_market_date": "2026-09-02",
   "round_start": "2026-06-02",
   "start_cash": 100000.0,
@@ -24,9 +24,9 @@
     {
       "name": "opu",
       "label": "round 1 \u00b7 entrant",
-      "equity": 100047.02,
-      "pnl": 47.02,
-      "ret": 0.0005,
+      "equity": 100040.4,
+      "pnl": 40.4,
+      "ret": 0.0004,
       "trades": 28
     },
     {
