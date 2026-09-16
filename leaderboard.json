@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-09-16T20:57:39Z",
+  "generated_at_utc": "2026-09-16T23:36:03Z",
   "as_of_market_date": "2026-09-16",
   "round_start": "2026-06-02",
   "start_cash": 100000.0,
@@ -72,8 +72,8 @@
     {
       "name": "zaid",
       "label": "round 1 \u00b7 entrant",
-      "equity": 88052.79,
-      "pnl": -11947.21,
+      "equity": 88053.18,
+      "pnl": -11946.82,
       "ret": -0.1195,
       "trades": 145
     },
